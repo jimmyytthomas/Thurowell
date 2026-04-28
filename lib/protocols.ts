@@ -1,0 +1,117 @@
+import type { Protocol } from '@/types';
+
+export const PROTOCOLS: Protocol[] = [
+  {
+    id: 'box-breathing',
+    name: "Box breathing",
+    category: "breathwork",
+    duration: "5 minutes",
+    steps: [
+      "Sit upright with feet flat on the floor and shoulders relaxed.",
+      "Exhale gently through your nose to empty your lungs.",
+      "Inhale slowly through your nose for a count of 4.",
+      "Hold your breath with lungs comfortably full for a count of 4.",
+      "Exhale slowly through your nose or mouth for a count of 4.",
+      "Hold empty with lungs gently relaxed for a count of 4.",
+      "Repeat the cycle for several rounds. Keep each phase smooth and equal—like tracing the sides of a square.",
+      "If a 4-count feels stiff, shorten all sides equally (for example 3) until it feels steady.",
+    ],
+    tags: ["calm", "focus"],
+    description:
+      "Equal inhale-hold-exhale-hold pacing that steadies attention and lowers arousal—often used under stress or before detailed work.",
+  },
+  {
+    id: "4-7-8-breathing",
+    name: "4-7-8 breathing",
+    category: "breathwork",
+    duration: "5 minutes",
+    steps: [
+      "Sit or lie down with your spine long and jaw soft.",
+      "Place the tip of your tongue lightly behind your upper front teeth and keep it there through the exercise.",
+      "Exhale completely through your mouth with a soft whoosh sound.",
+      "Close your lips and inhale quietly through your nose for a count of 4.",
+      "Hold your breath for a count of 7 without clamping your throat.",
+      "Exhale completely through your mouth with a whoosh for a count of 8.",
+      "That completes one cycle. Start the next inhale after the exhale finishes.",
+      "Begin with up to four cycles; increase gradually only if it stays comfortable.",
+    ],
+    tags: ["sleep", "calm", "reset"],
+    description:
+      "A longer exhale relative to inhale that shifts the nervous system toward rest—supportive when stress is high or winding down for sleep.",
+  },
+  {
+    id: "cyclic-sighing",
+    name: "Cyclic sighing",
+    category: "breathwork",
+    duration: "5 minutes",
+    steps: [
+      "Sit comfortably with shoulders relaxed.",
+      "Inhale slowly through your nose to partially fill your lungs.",
+      "Without exhaling, take a second shorter inhale through your nose (“sip” more air).",
+      "Exhale slowly and completely through your mouth with relaxed lips—often longer than the combined inhales.",
+      "Pause briefly at the bottom of the exhale without strain.",
+      "Repeat at a gentle rhythm for several minutes.",
+      "Keep the breath smooth; avoid forcing either inhale phase.",
+    ],
+    tags: ["focus", "calm"],
+    description:
+      "Double inhale followed by an extended sigh-like exhale—shown to improve mood and clarity quickly when attention feels scattered.",
+  },
+  {
+    id: "bellows-breath",
+    name: "Bellows breath",
+    category: "breathwork",
+    duration: "2 minutes",
+    steps: [
+      "Sit tall with spine neutral and abdomen free to move.",
+      "Take a normal inhale through your nose.",
+      "Perform rapid, equal in-and-out breaths through the nose using your diaphragm—belly expands on inhale, draws in on exhale.",
+      "Keep shoulders still; movement stays low in the torso.",
+      "Start with short rounds (for example 15 cycles), then breathe naturally between rounds.",
+      "Finish with slow nasal breathing until heart rate feels steady.",
+      "Skip this practice if you feel dizzy, faint, or have uncontrolled hypertension unless cleared by a clinician.",
+    ],
+    tags: ["focus", "confidence"],
+    description:
+      "Rhythmic abdominal pumping that raises alertness and warmth—helpful when energy is low but intensity should stay controlled.",
+  },
+  {
+    id: "power-breath",
+    name: "Power breath",
+    category: "breathwork",
+    duration: "3 minutes",
+    steps: [
+      "Stand or sit tall with ribs stacked over hips.",
+      "Relax neck and jaw; soften shoulders downward.",
+      "Inhale deeply through your nose, expanding ribs sideways and belly.",
+      "Exhale firmly through pursed lips as if blowing steadily through a straw—not sharp, but sustained.",
+      "Keep breath noise smooth and audible enough that pace stays deliberate.",
+      "Continue powerful full breaths for a short set (for example 10 breaths), then two slow recovery breaths.",
+      "Notice posture staying tall without locking knees if standing.",
+      "Stop if you feel lightheaded and return to gentle nasal breathing.",
+    ],
+    tags: ["confidence", "focus"],
+    description:
+      "Strong diaphragmatic cycling paired with upright posture—supports grounded confidence and clearer projection without sprint-style hyperventilation.",
+  },
+  {
+    id: "body-scan",
+    name: "Body scan",
+    category: "meditation",
+    duration: "15 minutes",
+    steps: [
+      "Lie down or recline so your body can fully relax.",
+      "Close your eyes or soften your gaze.",
+      "Bring attention to contact points—heels, calves, hips, shoulders, head.",
+      "Starting at toes or crown (pick one direction), notice sensations without forcing change.",
+      "Spend roughly half a breath to several breaths per region—moving slowly.",
+      "When you find tension, exhale softly and imagine warmth spreading through that area.",
+      "If thoughts wander, acknowledge them and return to the next body region.",
+      "End by sensing the whole body breathing together for a minute.",
+      "Open eyes gently and rise slowly.",
+    ],
+    tags: ["sleep", "calm", "reset"],
+    description:
+      "Guided progressive attention through the body to soften muscular holding patterns—often used before sleep or emotional settling.",
+  },
+];
