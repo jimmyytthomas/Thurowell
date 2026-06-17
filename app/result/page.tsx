@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { AppNav } from '@/components/AppNav';
 import { PROTOCOLS } from '@/lib/protocols';
-import { getSessions, updateFeedback } from '@/lib/storage';
+import { getSessions } from '@/lib/storage';
 import type { Goal, Protocol, Session } from '@/types';
 
 function goalPhrase(goal: Goal): string {
@@ -57,24 +57,23 @@ export default function ResultPage() {
     setLoading(false);
   }, [router]);
 
-  const handleFeedback = useCallback((helped: boolean) => {
-    setSession((prev) => {
-      if (!prev) return prev;
-      updateFeedback(prev.id, helped);
-      return { ...prev, helped };
-    });
-  }, []);
+  const handleStartSession = useCallback(() => {
+    if (!protocol) return;
+    router.push(`/session?protocolId=${encodeURIComponent(protocol.id)}`);
+  }, [protocol, router]);
 
   if (loading || !session || !protocol) {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col bg-[var(--bg)]">
         <AppNav />
         <div className="flex flex-1 flex-col items-center justify-center px-6 pb-24 pt-12">
           <div
-            className="h-10 w-10 animate-spin rounded-full border-2 border-teal-500 border-t-transparent"
+            className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent"
             aria-hidden
           />
-          <p className="mt-5 text-sm font-medium text-slate-400">Loading your protocol…</p>
+          <p className="mt-5 text-sm font-light text-[var(--text-secondary)]">
+            Loading your protocol…
+          </p>
         </div>
       </div>
     );
@@ -85,74 +84,44 @@ export default function ResultPage() {
   const whyCopy = `Based on your stress level of ${stress}, energy level of ${energy}, and focus level of ${focusLevel}, with a goal to ${goalPhrase(goal)}, Thurowell recommends ${protocol.name}.`;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-[var(--bg)] text-[var(--text-primary)]">
       <AppNav />
 
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-8 md:pt-10">
         <Link
           href="/"
-          className="inline-flex items-center gap-1 text-sm font-medium text-teal-400 transition-colors duration-200 hover:text-teal-300"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[var(--text-secondary)] transition-colors duration-200 hover:text-[var(--accent)]"
         >
           ← New Check-in
         </Link>
 
-        <article className="mt-8 rounded-2xl bg-slate-800 p-8 shadow-2xl ring-1 ring-slate-700/60 md:p-10">
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{protocol.name}</h1>
-          <p className="mt-3 text-sm font-medium text-slate-400">{subtitle}</p>
-          <p className="mt-8 leading-relaxed text-slate-200 md:text-[17px]">{protocol.description}</p>
+        <article className="mt-8 rounded-2xl bg-[var(--surface)] p-8 ring-1 ring-[var(--border)] md:p-10">
+          <h1 className="text-3xl font-light tracking-tight md:text-4xl">{protocol.name}</h1>
+          <p className="mt-3 text-sm font-medium text-[var(--text-secondary)]">{subtitle}</p>
+          <p className="mt-8 leading-relaxed text-[var(--text-primary)]/90">
+            {protocol.description}
+          </p>
 
-          <section className="mt-10 rounded-xl bg-slate-700/50 p-6 ring-1 ring-slate-600/40 md:p-8">
-            <h2 className="text-lg font-semibold text-white">Why this protocol?</h2>
-            <p className="mt-3 leading-relaxed text-slate-200 md:text-[17px]">{whyCopy}</p>
+          <section className="mt-10 rounded-xl bg-[var(--bg)]/60 p-6 ring-1 ring-[var(--border)] md:p-8">
+            <h2 className="text-base font-medium text-[var(--text-primary)]">
+              Why this protocol?
+            </h2>
+            <p className="mt-3 leading-relaxed text-[var(--text-secondary)]">{whyCopy}</p>
           </section>
 
-          <section className="mt-10 border-t border-slate-700/80 pt-10">
-            <h2 className="text-lg font-semibold text-white">Steps</h2>
-            <ol className="mt-6 list-none space-y-5">
-              {protocol.steps.map((step, index) => (
-                <li key={index} className="flex gap-4">
-                  <span
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-sm font-bold text-teal-400 ring-1 ring-teal-500/30"
-                    aria-hidden
-                  >
-                    {index + 1}
-                  </span>
-                  <p className="pt-1 leading-relaxed text-slate-200 md:text-[17px]">{step}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className="mt-10 border-t border-slate-700/80 pt-10">
-            {session.helped === null ? (
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => handleFeedback(true)}
-                  className="min-h-[52px] flex-1 rounded-xl bg-teal-600 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-teal-900/30 transition-colors duration-200 hover:bg-teal-500 sm:min-w-[180px]"
-                >
-                  ✓ It Helped
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleFeedback(false)}
-                  className="min-h-[52px] flex-1 rounded-xl bg-slate-600 px-6 py-4 text-base font-semibold text-white shadow-lg transition-colors duration-200 hover:bg-slate-500 sm:min-w-[180px]"
-                >
-                  ✗ Didn&apos;t Help
-                </button>
-              </div>
-            ) : (
-              <p className="text-sm font-medium text-teal-400/95">
-                Thanks for your feedback!
-              </p>
-            )}
-          </section>
+          <button
+            type="button"
+            onClick={handleStartSession}
+            className="mt-10 w-full rounded-xl bg-[var(--accent)] py-4 text-base font-semibold text-black shadow-[0_0_32px_var(--accent-glow)] transition-colors duration-200 hover:bg-[var(--accent-hover)]"
+          >
+            Start Session
+          </button>
         </article>
 
         <div className="mt-12 text-center">
           <Link
             href="/history"
-            className="inline-flex items-center gap-1 text-sm font-medium text-teal-400 transition-colors duration-200 hover:text-teal-300"
+            className="inline-flex items-center gap-1 text-sm font-medium text-[var(--text-secondary)] transition-colors duration-200 hover:text-[var(--accent)]"
           >
             View Session History →
           </Link>

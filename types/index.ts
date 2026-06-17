@@ -24,3 +24,25 @@ export interface Session {
   recommendedProtocol: string;
   helped: boolean | null;
 }
+
+export type BreathPhase = {
+  label: 'Inhale' | 'Inhale (sip)' | 'Hold' | 'Exhale' | 'Hold (empty)';
+  duration: number; // seconds
+  scale: number; // circle scale target
+  color: string; // hex color
+  glow: string; // CSS box-shadow string or empty string
+};
+
+export type BreathProtocolConfig = {
+  protocolId: string;
+  phases: BreathPhase[];
+  totalCycles: number;
+};
+
+export type SessionFeedback = {
+  protocolId: string;
+  completedAt: string; // ISO string
+  moodBefore?: number; // 1–5
+  moodAfter?: number; // 1–5
+  notes?: string;
+};

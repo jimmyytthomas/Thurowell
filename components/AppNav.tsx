@@ -9,12 +9,12 @@ export function AppNav() {
   const isHistory = pathname === '/history';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-2xl items-center justify-between px-6 py-4">
         <Link
           href="/"
-          className={`text-lg font-bold tracking-tight transition-colors duration-200 ${
-            isHome ? 'text-teal-400' : 'text-white hover:text-teal-300'
+          className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${
+            isHome ? 'text-[var(--accent)]' : 'text-[var(--text-primary)] hover:text-[var(--accent)]'
           }`}
         >
           Thurowell
@@ -22,7 +22,9 @@ export function AppNav() {
         <Link
           href="/history"
           className={`text-sm font-medium transition-colors duration-200 ${
-            isHistory ? 'text-teal-400' : 'text-slate-300 hover:text-teal-400'
+            isHistory
+              ? 'text-[var(--accent)]'
+              : 'text-[var(--text-secondary)] hover:text-[var(--accent)]'
           }`}
         >
           History
