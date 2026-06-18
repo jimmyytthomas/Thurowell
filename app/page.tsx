@@ -1,15 +1,34 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppNav } from '@/components/AppNav';
 import CheckInForm from '@/components/CheckInForm';
+import WelcomeInstructions from '@/components/WelcomeInstructions';
 import { classify } from '@/lib/recommend';
 import { saveSession } from '@/lib/storage';
 import type { CheckIn, Session } from '@/types';
 
+const READY_KEY = 'thurowell_ready';
+
 export default function Page() {
   const router = useRouter();
+  const [hasAcceptedInstructions, setHasAcceptedInstructions] = useState<
+    boolean | null
+  >(null);
+
+  useEffect(() => {
+    setHasAcceptedInstructions(localStorage.getItem(READY_KEY) === 'true');
+  }, []);
+
+  const handleReady = useCallback(() => {
+    try {
+      localStorage.setItem(READY_KEY, 'true');
+    } catch {
+      // Continue even if storage is unavailable
+    }
+    setHasAcceptedInstructions(true);
+  }, []);
 
   const handleSubmit = useCallback(
     (checkIn: CheckIn) => {
@@ -27,6 +46,18 @@ export default function Page() {
     },
     [router],
   );
+
+  if (hasAcceptedInstructions === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] text-[var(--text-secondary)]">
+        <p className="font-light">Loading…</p>
+      </div>
+    );
+  }
+
+  if (!hasAcceptedInstructions) {
+    return <WelcomeInstructions onReady={handleReady} />;
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--bg)] text-[var(--text-primary)]">
