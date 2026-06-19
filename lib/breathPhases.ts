@@ -61,17 +61,17 @@ export const BREATH_CONFIGS: BreathProtocolConfig[] = [
       phase(EXHALE, 4),
       phase(HOLD_EMPTY, 4),
     ],
-    totalCycles: 5,
+    totalCycles: 18,
   },
   {
     protocolId: '4-7-8-breathing',
     phases: [phase(INHALE, 4), phase(HOLD, 7), phase(EXHALE, 8)],
-    totalCycles: 4,
+    totalCycles: 16,
   },
   {
     protocolId: 'cyclic-sighing',
     phases: [phase(INHALE, 3), phase(INHALE_SIP, 1.5), phase(EXHALE, 6)],
-    totalCycles: 6,
+    totalCycles: 28,
   },
   {
     protocolId: 'bellows-breath',
@@ -81,7 +81,7 @@ export const BREATH_CONFIGS: BreathProtocolConfig[] = [
   {
     protocolId: 'power-breath',
     phases: [phase(INHALE, 3), phase(EXHALE, 4)],
-    totalCycles: 10,
+    totalCycles: 26,
   },
 ];
 

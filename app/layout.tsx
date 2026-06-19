@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Thurowell',
-  description: 'Mental performance, on demand.',
+  description: 'Control your breath, control your mind.',
 };
 
 export default function RootLayout({

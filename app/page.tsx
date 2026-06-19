@@ -65,8 +65,8 @@ export default function Page() {
 
       <main className="flex flex-1 flex-col px-6 pb-20 pt-10 md:pt-14">
         <div className="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-          <p className="max-w-xl text-pretty text-2xl font-light leading-snug tracking-tight md:text-4xl md:leading-tight">
-            Mental performance, on demand.
+          <p className="max-w-2xl text-pretty text-xl font-light uppercase leading-snug tracking-wide md:text-3xl md:leading-tight">
+            CONTROL YOUR BREATH, CONTROL YOUR MIND.
           </p>
         </div>
 

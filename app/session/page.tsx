@@ -1,12 +1,12 @@
 'use client';
 
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import BreathingSession from '@/components/BreathingSession';
-import MeditationSession from '@/components/MeditationSession';
 import type { SessionFeedback } from '@/types';
 
 const PENDING_FEEDBACK_KEY = 'thurowell_pending_feedback';
+const BOX_BREATHING_ID = 'box-breathing';
 
 function savePartialFeedback(
   feedback: Pick<SessionFeedback, 'protocolId' | 'completedAt'>,
@@ -24,17 +24,22 @@ function SessionContent() {
   const searchParams = useSearchParams();
   const protocolId = searchParams.get('protocolId') ?? '';
 
+  const activeProtocolId = useMemo(
+    () => (protocolId === 'body-scan' ? BOX_BREATHING_ID : protocolId),
+    [protocolId],
+  );
+
   const handleComplete = useCallback(() => {
-    if (!protocolId) {
+    if (!activeProtocolId) {
       router.push('/');
       return;
     }
     savePartialFeedback({
-      protocolId,
+      protocolId: activeProtocolId,
       completedAt: new Date().toISOString(),
     });
     router.push('/complete');
-  }, [protocolId, router]);
+  }, [activeProtocolId, router]);
 
   if (!protocolId) {
     return (
@@ -53,12 +58,8 @@ function SessionContent() {
     );
   }
 
-  if (protocolId === 'body-scan') {
-    return <MeditationSession onComplete={handleComplete} />;
-  }
-
   return (
-    <BreathingSession protocolId={protocolId} onComplete={handleComplete} />
+    <BreathingSession protocolId={activeProtocolId} onComplete={handleComplete} />
   );
 }
 

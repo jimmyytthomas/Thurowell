@@ -3,19 +3,19 @@ import type { CheckIn } from '@/types';
 export function classify(checkIn: CheckIn): string {
   const { stress, energy, focus, goal } = checkIn;
 
-  if (stress >= 7 && goal === 'sleep') {
+  if (stress >= 4 && goal === 'sleep') {
     return '4-7-8-breathing';
   }
-  if (stress >= 7) {
+  if (stress >= 4) {
     return '4-7-8-breathing';
   }
-  if (energy <= 3 && goal === 'confidence') {
+  if (energy <= 2 && goal === 'confidence') {
     return 'power-breath';
   }
-  if (energy <= 3) {
+  if (energy <= 2) {
     return 'bellows-breath';
   }
-  if (focus <= 4 || goal === 'focus') {
+  if (focus <= 2 || goal === 'focus') {
     return 'cyclic-sighing';
   }
   if (goal === 'calm' || goal === 'reset') {

@@ -16,9 +16,9 @@ export type CheckInFormProps = {
 };
 
 export default function CheckInForm({ onSubmit }: CheckInFormProps) {
-  const [stress, setStress] = useState(5);
-  const [energy, setEnergy] = useState(5);
-  const [focus, setFocus] = useState(5);
+  const [stress, setStress] = useState(3);
+  const [energy, setEnergy] = useState(3);
+  const [focus, setFocus] = useState(3);
   const [goal, setGoal] = useState<Goal | null>(null);
 
   const handleSubmit = useCallback(
@@ -95,7 +95,7 @@ function SliderRow({ label, value, onChange, id }: SliderRowProps) {
         id={id}
         type="range"
         min={1}
-        max={10}
+        max={5}
         step={1}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
@@ -103,7 +103,7 @@ function SliderRow({ label, value, onChange, id }: SliderRowProps) {
       />
       <div className="flex justify-between text-xs text-[var(--text-secondary)]">
         <span>1</span>
-        <span>10</span>
+        <span>5</span>
       </div>
     </div>
   );
