@@ -3,22 +3,37 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppNav } from '@/components/AppNav';
-import CheckInForm from '@/components/CheckInForm';
 import WelcomeInstructions from '@/components/WelcomeInstructions';
-import { classify } from '@/lib/recommend';
-import { saveSession } from '@/lib/storage';
-import type { CheckIn, Session } from '@/types';
+import { PROTOCOLS } from '@/lib/protocols';
+import type { Protocol } from '@/types';
 
 const READY_KEY = 'thurowell_ready';
 
+const MAIN_PROTOCOLS = PROTOCOLS.filter(
+  (p) => p.category === 'breathwork' && p.id !== 'bellows-breath',
+);
+
+function categoryLabel(category: Protocol['category']): string {
+  return category === 'breathwork' ? 'Breathwork' : 'Meditation';
+}
+
+function readReadyFlag(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return localStorage.getItem(READY_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
 export default function Page() {
   const router = useRouter();
-  const [hasAcceptedInstructions, setHasAcceptedInstructions] = useState<
-    boolean | null
-  >(null);
+  const [hasAcceptedInstructions, setHasAcceptedInstructions] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setHasAcceptedInstructions(localStorage.getItem(READY_KEY) === 'true');
+    setHasAcceptedInstructions(readReadyFlag());
+    setHydrated(true);
   }, []);
 
   const handleReady = useCallback(() => {
@@ -30,27 +45,22 @@ export default function Page() {
     setHasAcceptedInstructions(true);
   }, []);
 
-  const handleSubmit = useCallback(
-    (checkIn: CheckIn) => {
-      const protocolId = classify(checkIn);
-      const session: Session = {
-        id: crypto.randomUUID(),
-        timestamp: new Date().toISOString(),
-        checkIn,
-        recommendedProtocol: protocolId,
-        helped: null,
-      };
-      saveSession(session);
-      sessionStorage.setItem('thurowell_current', session.id);
-      router.push('/result');
+  const handleSelectProtocol = useCallback(
+    (protocolId: string) => {
+      try {
+        sessionStorage.setItem('thurowell_protocol', protocolId);
+      } catch {
+        // Continue even if storage is unavailable
+      }
+      router.push(`/result?protocolId=${encodeURIComponent(protocolId)}`);
     },
     [router],
   );
 
-  if (hasAcceptedInstructions === null) {
+  if (!hydrated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] text-[var(--text-secondary)]">
-        <p className="font-light">Loading…</p>
+      <div className="flex min-h-screen flex-col bg-[var(--bg)] text-[var(--text-primary)]">
+        <WelcomeInstructions onReady={handleReady} />
       </div>
     );
   }
@@ -68,11 +78,34 @@ export default function Page() {
           <p className="max-w-2xl text-pretty text-xl font-light uppercase leading-snug tracking-wide md:text-3xl md:leading-tight">
             CONTROL YOUR BREATH, CONTROL YOUR MIND.
           </p>
+          <p className="mt-4 text-sm text-[var(--text-secondary)]">
+            Choose a protocol to begin.
+          </p>
         </div>
 
-        <div className="mx-auto mt-14 w-full max-w-xl md:mt-16">
-          <CheckInForm onSubmit={handleSubmit} />
-        </div>
+        <ul className="mx-auto mt-12 flex w-full max-w-xl flex-col gap-4 md:mt-14">
+          {MAIN_PROTOCOLS.map((protocol) => (
+            <li key={protocol.id}>
+              <button
+                type="button"
+                onClick={() => handleSelectProtocol(protocol.id)}
+                className="w-full rounded-2xl border border-[var(--border)] border-l-4 border-l-[var(--accent)] bg-[var(--surface)] p-5 text-left transition-colors duration-200 hover:bg-[var(--surface-raised)] hover:ring-1 hover:ring-[var(--accent)]/30 md:p-6"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h2 className="text-lg font-medium text-[var(--text-primary)]">
+                    {protocol.name}
+                  </h2>
+                  <span className="text-xs font-medium text-[var(--text-secondary)]">
+                    {categoryLabel(protocol.category)} · {protocol.duration}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  {protocol.description}
+                </p>
+              </button>
+            </li>
+          ))}
+        </ul>
 
         <div className="mx-auto mt-14 max-w-xl md:mt-16">
           <p className="text-center text-xs leading-relaxed text-[var(--text-secondary)]">

@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 export function AppNav() {
   const pathname = usePathname();
   const isHome = pathname === '/';
-  const isHistory = pathname === '/history';
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md">
@@ -18,16 +17,6 @@ export function AppNav() {
           }`}
         >
           Thurowell
-        </Link>
-        <Link
-          href="/history"
-          className={`text-sm font-medium transition-colors duration-200 ${
-            isHistory
-              ? 'text-[var(--accent)]'
-              : 'text-[var(--text-secondary)] hover:text-[var(--accent)]'
-          }`}
-        >
-          History
         </Link>
       </div>
     </header>

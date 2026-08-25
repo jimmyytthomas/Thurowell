@@ -168,7 +168,7 @@ export default function BreathingSession({
   const isPrep = mode === 'prep';
   const label = isPrep ? 'Get ready' : (phase?.label ?? '');
   const displayCount = isPrep ? prepCount : countdown;
-  const circleColor = isPrep ? '#365314' : (phase?.color ?? '#365314');
+  const circleColor = isPrep ? '#6e6e8a' : (phase?.color ?? '#6e6e8a');
   const circleGlow = isPrep ? '' : (phase?.glow ?? '');
 
   return (

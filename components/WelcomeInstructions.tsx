@@ -2,24 +2,19 @@
 
 const STEPS = [
   {
-    title: 'Check in',
+    title: 'Pick a protocol',
     description:
-      'Rate your stress, energy, and focus from 1–5, then choose a goal for this session.',
+      'Choose a breathwork technique from the list — each one is designed for a different mental state.',
   },
   {
-    title: 'Get your protocol',
+    title: 'Review & start',
     description:
-      'Thurowell recommends a breathwork or meditation technique matched to how you feel right now.',
+      'Read a short overview of the practice, then tap Start Session when you are ready.',
   },
   {
-    title: 'Start the session',
+    title: 'Follow the guide',
     description:
-      'Follow the guided breathing circle or audio meditation. A short countdown gives you time to settle in.',
-  },
-  {
-    title: 'Reflect & track',
-    description:
-      'After your session, note how you felt. Your history is saved locally on this device.',
+      'A short 3–2–1 countdown lets you settle in, then the breathing circle leads you through each phase.',
   },
 ] as const;
 

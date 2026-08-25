@@ -2,35 +2,35 @@ import type { BreathPhase, BreathProtocolConfig } from '@/types';
 
 const INHALE: Pick<BreathPhase, 'label' | 'color' | 'glow' | 'scale'> = {
   label: 'Inhale',
-  color: '#4ade80',
-  glow: '0 0 48px rgba(74, 222, 128, 0.45)',
+  color: '#4a9eff',
+  glow: '0 0 48px rgba(74, 158, 255, 0.4)',
   scale: 1.35,
 };
 
 const INHALE_SIP: Pick<BreathPhase, 'label' | 'color' | 'glow' | 'scale'> = {
   label: 'Inhale (sip)',
-  color: '#4ade80',
-  glow: '0 0 48px rgba(74, 222, 128, 0.45)',
+  color: '#4a9eff',
+  glow: '0 0 48px rgba(74, 158, 255, 0.4)',
   scale: 1.35,
 };
 
 const HOLD: Pick<BreathPhase, 'label' | 'color' | 'glow' | 'scale'> = {
   label: 'Hold',
-  color: '#22c55e',
-  glow: '0 0 48px rgba(34, 197, 94, 0.4)',
+  color: '#a78bfa',
+  glow: '0 0 48px rgba(167, 139, 250, 0.4)',
   scale: 1.35,
 };
 
 const EXHALE: Pick<BreathPhase, 'label' | 'color' | 'glow' | 'scale'> = {
   label: 'Exhale',
-  color: '#15803d',
-  glow: '0 0 48px rgba(21, 128, 61, 0.35)',
+  color: '#34d399',
+  glow: '0 0 48px rgba(52, 211, 153, 0.4)',
   scale: 1.0,
 };
 
 const HOLD_EMPTY: Pick<BreathPhase, 'label' | 'color' | 'glow' | 'scale'> = {
   label: 'Hold (empty)',
-  color: '#365314',
+  color: '#6e6e8a',
   glow: '',
   scale: 1.0,
 };
