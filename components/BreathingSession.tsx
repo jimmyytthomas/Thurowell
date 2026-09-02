@@ -1,12 +1,27 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  playBreathAudio,
+  soundKindForPhaseLabel,
+  stopBreathAudio,
+  unlockBreathAudio,
+} from '@/lib/breathAudio';
 import { getBreathConfig } from '@/lib/breathPhases';
 import type { BreathPhase, BreathProtocolConfig } from '@/types';
 
 interface BreathingSessionProps {
   protocolId: string;
   onComplete: () => void;
+  boxPhaseDuration?: number;
+  sessionMinutes?: number;
 }
 
 type SessionMode = 'loading' | 'prep' | 'active';
@@ -24,8 +39,13 @@ function wait(ms: number, cancelled: () => boolean): Promise<void> {
 export default function BreathingSession({
   protocolId,
   onComplete,
+  boxPhaseDuration,
+  sessionMinutes,
 }: BreathingSessionProps) {
-  const config = getBreathConfig(protocolId);
+  const config = useMemo(
+    () => getBreathConfig(protocolId, { boxPhaseDuration, sessionMinutes }),
+    [protocolId, boxPhaseDuration, sessionMinutes],
+  );
   const [mode, setMode] = useState<SessionMode>('loading');
   const [prepCount, setPrepCount] = useState(0);
   const [phase, setPhase] = useState<BreathPhase | null>(null);
@@ -43,13 +63,29 @@ export default function BreathingSession({
   const finishSession = useCallback(() => {
     if (completedRef.current) return;
     completedRef.current = true;
+    stopBreathAudio();
     onCompleteRef.current();
   }, []);
 
   const handleEndEarly = useCallback(() => {
     cancelledRef.current = true;
+    stopBreathAudio();
     finishSession();
   }, [finishSession]);
+
+  useEffect(() => {
+    const unlock = () => {
+      unlockBreathAudio();
+    };
+    window.addEventListener('pointerdown', unlock);
+    window.addEventListener('keydown', unlock);
+    unlockBreathAudio();
+    return () => {
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('keydown', unlock);
+      stopBreathAudio();
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (mode !== 'active' || !phase) return;
@@ -92,6 +128,8 @@ export default function BreathingSession({
       setCircleScale(1);
       setMode('prep');
       setPhase(null);
+      stopBreathAudio();
+      unlockBreathAudio();
 
       for (const n of [3, 2, 1] as const) {
         if (cancelledRef.current) return;
@@ -120,6 +158,13 @@ export default function BreathingSession({
           setPhase(currentPhase);
           setCountdown(Math.max(1, Math.ceil(currentPhase.duration)));
 
+          const kind = soundKindForPhaseLabel(currentPhase.label);
+          if (kind) {
+            playBreathAudio(kind, currentPhase.duration);
+          } else {
+            stopBreathAudio();
+          }
+
           const durationMs = currentPhase.duration * 1000;
           const start = Date.now();
           const intervalId = setInterval(() => {
@@ -144,6 +189,7 @@ export default function BreathingSession({
 
     return () => {
       cancelledRef.current = true;
+      stopBreathAudio();
     };
   }, [config, finishSession]);
 

@@ -3,21 +3,13 @@
 import { Suspense, useCallback, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import BreathingSession from '@/components/BreathingSession';
-import type { SessionFeedback } from '@/types';
+import {
+  isBoxBreathingPhaseDuration,
+  isSessionDurationMinutes,
+  DEFAULT_SESSION_MINUTES,
+} from '@/lib/breathPhases';
 
-const PENDING_FEEDBACK_KEY = 'thurowell_pending_feedback';
 const BOX_BREATHING_ID = 'box-breathing';
-
-function savePartialFeedback(
-  feedback: Pick<SessionFeedback, 'protocolId' | 'completedAt'>,
-): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(PENDING_FEEDBACK_KEY, JSON.stringify(feedback));
-  } catch {
-    // Ignore storage failures
-  }
-}
 
 function SessionContent() {
   const router = useRouter();
@@ -29,16 +21,26 @@ function SessionContent() {
     [protocolId],
   );
 
+  const boxPhaseDuration = useMemo(() => {
+    if (activeProtocolId !== BOX_BREATHING_ID) return undefined;
+    const raw = searchParams.get('phaseDuration');
+    const parsed = raw ? Number(raw) : 4;
+    return isBoxBreathingPhaseDuration(parsed) ? parsed : 4;
+  }, [activeProtocolId, searchParams]);
+
+  const sessionMinutes = useMemo(() => {
+    const raw = searchParams.get('duration');
+    const parsed = raw ? Number(raw) : DEFAULT_SESSION_MINUTES;
+    return isSessionDurationMinutes(parsed) ? parsed : DEFAULT_SESSION_MINUTES;
+  }, [searchParams]);
+
   const handleComplete = useCallback(() => {
     if (!activeProtocolId) {
       router.push('/');
       return;
     }
-    savePartialFeedback({
-      protocolId: activeProtocolId,
-      completedAt: new Date().toISOString(),
-    });
-    router.push('/complete');
+    const params = new URLSearchParams({ protocolId: activeProtocolId });
+    router.push(`/complete?${params.toString()}`);
   }, [activeProtocolId, router]);
 
   if (!protocolId) {
@@ -52,14 +54,19 @@ function SessionContent() {
           onClick={() => router.push('/')}
           className="mt-6 text-sm text-[var(--accent)] transition-colors duration-300 hover:text-[var(--accent-hover)]"
         >
-          Return to check-in
+          Return to choices
         </button>
       </div>
     );
   }
 
   return (
-    <BreathingSession protocolId={activeProtocolId} onComplete={handleComplete} />
+    <BreathingSession
+      protocolId={activeProtocolId}
+      boxPhaseDuration={boxPhaseDuration}
+      sessionMinutes={sessionMinutes}
+      onComplete={handleComplete}
+    />
   );
 }
 

@@ -9,7 +9,7 @@ const STEPS = [
   {
     title: 'Review & start',
     description:
-      'Read a short overview of the practice, then tap Start Session when you are ready.',
+      'Read a short overview, choose your session length, then tap Start Session when you are ready.',
   },
   {
     title: 'Follow the guide',
@@ -31,9 +31,11 @@ export default function WelcomeInstructions({ onReady }: WelcomeInstructionsProp
             Welcome
           </p>
           <h1 className="mt-4 text-4xl font-light tracking-tight md:text-5xl">Thurowell</h1>
-          <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-[var(--text-secondary)]">
-            CONTROL YOUR BREATH, CONTROL YOUR MIND. Here&apos;s how to use the app
-            before you begin.
+          <p className="mx-auto mt-5 max-w-lg text-base font-light uppercase leading-snug tracking-wide text-[var(--text-primary)]">
+            CONTROL YOUR BREATH, CONTROL YOUR MIND.
+          </p>
+          <p className="mx-auto mt-3 max-w-lg text-base leading-relaxed text-[var(--text-secondary)]">
+            Here&apos;s how to use the app before you begin.
           </p>
         </div>
 

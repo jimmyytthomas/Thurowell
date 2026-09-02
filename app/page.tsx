@@ -96,7 +96,7 @@ export default function Page() {
                     {protocol.name}
                   </h2>
                   <span className="text-xs font-medium text-[var(--text-secondary)]">
-                    {categoryLabel(protocol.category)} · {protocol.duration}
+                    {categoryLabel(protocol.category)} · 5–10 min
                   </span>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
